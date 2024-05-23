@@ -7,6 +7,7 @@
  * 
  * 
  * testing for an opencv bug
+ * https://github.com/opencv/opencv/issues/10694
  * 
  * first commit:
  * Hari Nandakumar
@@ -45,6 +46,15 @@ using namespace cv;
 
 int main(int argc,char *argv[])
 {
+	
+Mat m(960,1280,CV_16U);
+randn(m,10000, 500);
+Scalar M,D;
+meanStdDev(m,M,D);
+std::cout << M(0) << " " << D(0) << std::endl;
+Mat m2 = m.reshape(0,1);
+meanStdDev(m2,M,D);
+std::cout << M(0) << " " << D(0);
 	
     
     std::cout << std::endl << "Finished writing" << std::endl;

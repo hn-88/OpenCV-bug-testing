@@ -57,6 +57,11 @@ jobs:
         msbuild /m /p:Platform=x64 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}}
       # Rename-Item "x64\Release\x64Win10.exe"
 
+    - name: test
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: |
+        x64\Release\x64Win10.exe
+
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v4
       with:

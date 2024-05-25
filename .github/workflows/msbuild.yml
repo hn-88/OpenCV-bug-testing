@@ -57,13 +57,7 @@ jobs:
         msbuild /m /p:Platform=x64 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}}
       # Rename-Item "x64\Release\x64Win10.exe"
 
-    - name: test
-      working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: |
-        cd x64
-        cd Release
-        cmd.exe /c x64Win10.exe > output.txt
-        type output.txt
+
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v4
@@ -84,3 +78,11 @@ jobs:
         #Minimum 1 day. Maximum 90 days unless changed from the repository settings page.
 
         #retention-days: 0# optional
+
+    - name: test
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: |
+        cd x64
+        cd Release
+        & cmd.exe /c x64Win10.exe > output.txt
+        type output.txt

@@ -45,19 +45,48 @@ using namespace cv;
 
 
 int main(int argc,char *argv[])
-{
+{	
+	Mat m(960,1280,CV_16U);
+	randn(m,10000, 500);
+	Scalar M,D;
+	meanStdDev(m,M,D);
+	std::cout << M(0) << " " << D(0) << std::endl;
+	Mat m2 = m.reshape(0,1);
+	meanStdDev(m2,M,D);
+	std::cout << M(0) << " " << D(0);
+		
+	std::cout << std::endl << "The above was for randn(m,10000,500)" << std::endl;
+	std::cout << "Now testing for 1,000,000 with the bug report code from asitjain" << std::endl;
+	std::cout << "a dataset comprising approximately one million 1x1024D vectors. The dataset is normalized within the 0-255 range ..." << std::endl;
+
+	# generate the data
+	Mat floatDataMat(1,1000000,CV_64F);
+	randn(floatDataMat,128, 10);
+	std::cout << "randn(floatDataMat,128, 10); --> generated data has a mean of 128 and stddev of 10" << std::endl;	
+
+	// Calculate the mean
+	cv::Scalar mean = cv::mean(floatDataMat);
 	
-Mat m(960,1280,CV_16U);
-randn(m,10000, 500);
-Scalar M,D;
-meanStdDev(m,M,D);
-std::cout << M(0) << " " << D(0) << std::endl;
-Mat m2 = m.reshape(0,1);
-meanStdDev(m2,M,D);
-std::cout << M(0) << " " << D(0);
+	// Calculate the standard deviation
+	cv::Mat stdmat = floatDataMat - mean[0];
+	cv::Mat sqmat;
+	cv::multiply(stdmat, stdmat, sqmat);
 	
-    
-    std::cout << std::endl << "Finished writing" << std::endl;
+	// Sum the squared differences
+	cv::Scalar sum = cv::sum(sqmat);
+	double dSum = sum[0];
+	double stdDev = dSum / (static_cast<double>(floatDataMat.rows) * floatDataMat.cols);
+	stdDev = sqrt(stdDev);
+	
+	std::cout << "Mean: " << mean[0] << " StdDev: " << stdDev << std::endl;
+	std::cout << "The above mean and std dev were as calculated using cv::sum, using static_cast<double> etc." << std::endl;
+
+	meanStdDev(floatDataMat,M,D);
+	std::cout << M(0) << " " << D(0) << " This is using meanStdDev(floatDataMat,M,D);" << std::endl;
+	Mat fdm2 = floatDataMat.reshape(0,1);
+	meanStdDev(fdm2,M,D);
+	std::cout << M(0) << " " << D(0) << " This is using meanStdDev(floatDataMat.reshape(0,1),M,D);" << std::endl;
+	
     return 0;
 	   
 	   

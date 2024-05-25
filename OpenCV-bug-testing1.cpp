@@ -60,7 +60,7 @@ int main(int argc,char *argv[])
 	std::cout << "a dataset comprising approximately one million 1x1024D vectors. The dataset is normalized within the 0-255 range ..." << std::endl;
 
 	// generate the data
-	Mat floatDataMat(1,1000000,CV_64F);
+	Mat floatDataMat(1024,1000000,CV_64F);
 	randn(floatDataMat,128, 10);
 	std::cout << "randn(floatDataMat,128, 10); --> generated data has a mean of 128 and stddev of 10" << std::endl;	
 

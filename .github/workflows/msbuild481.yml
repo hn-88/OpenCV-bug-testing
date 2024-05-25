@@ -3,7 +3,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: MSBuild
+name: UsingOCV4.8.1
 
 on: workflow_dispatch
 

@@ -60,32 +60,32 @@ int main(int argc,char *argv[])
 	std::cout << "a dataset comprising approximately one million 1x1024D vectors. The dataset is normalized within the 0-255 range ..." << std::endl;
 
 	// generate the data
-	Mat floatDataMat(1024,1000000,CV_64F);
-	randn(floatDataMat,128, 10);
-	std::cout << "randn(floatDataMat,128, 10); --> generated data has a mean of 128 and stddev of 10" << std::endl;	
+	Mat u8DataMat(1024,1000000,CV_8U);
+	randn(u8DataMat,128, 10);
+	std::cout << "randn(u8DataMat,128, 10); --> generated data has a mean of 128 and stddev of 10" << std::endl;	
 
 	// Calculate the mean
-	cv::Scalar mean = cv::mean(floatDataMat);
+	cv::Scalar mean = cv::mean(u8DataMat);
 	
 	// Calculate the standard deviation
-	cv::Mat stdmat = floatDataMat - mean[0];
+	cv::Mat stdmat = u8DataMat - mean[0];
 	cv::Mat sqmat;
 	cv::multiply(stdmat, stdmat, sqmat);
 	
 	// Sum the squared differences
 	cv::Scalar sum = cv::sum(sqmat);
 	double dSum = sum[0];
-	double stdDev = dSum / (static_cast<double>(floatDataMat.rows) * floatDataMat.cols);
+	double stdDev = dSum / (static_cast<double>(u8DataMat.rows) * u8DataMat.cols);
 	stdDev = sqrt(stdDev);
 	
 	std::cout << "Mean: " << mean[0] << " StdDev: " << stdDev << std::endl;
 	std::cout << "The above mean and std dev were as calculated using cv::sum, using static_cast<double> etc." << std::endl;
 
-	meanStdDev(floatDataMat,M,D);
-	std::cout << M(0) << " " << D(0) << " This is using meanStdDev(floatDataMat,M,D);" << std::endl;
-	Mat fdm2 = floatDataMat.reshape(0,1);
+	meanStdDev(u8DataMat,M,D);
+	std::cout << M(0) << " " << D(0) << " This is using meanStdDev(u8DataMat,M,D);" << std::endl;
+	Mat fdm2 = u8DataMat.reshape(0,1);
 	meanStdDev(fdm2,M,D);
-	std::cout << M(0) << " " << D(0) << " This is using meanStdDev(floatDataMat.reshape(0,1),M,D);" << std::endl;
+	std::cout << M(0) << " " << D(0) << " This is using meanStdDev(u8DataMat.reshape(0,1),M,D);" << std::endl;
 	
     return 0;
 	   
